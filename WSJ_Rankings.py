@@ -31,10 +31,26 @@ class wsjRankingsClass:
 		self.engagement = []
 		self.environment = []
 		self.average_net_price = []
+		#Details
+		self.overall_score = []
+		self.outcomes_score = []
+		self.resources_score = []
+		self.engagement_score = []
+		self.environment_score = []
+		self.enrollment = []
+		self.studentfac_ratio = []
+		self.spending_per_student = []
+		self.tuition = []
+		self.room_and_board = []
+		self.salary_10_years_after = []
+		self.default_rate = []
+		self.debt_after_grad = []
 
 class pageInfoClass:
 	def __init__(self):
 		pass
+
+
 # This function initializes and opens a chrome window controlled by selenium
 # It takes no arguments and returns a pageInfo object, which contains:
 # 1. driver (selenium-created object for controlling clicks)
@@ -84,7 +100,7 @@ def getWSJInfo():
 	while(1):
 		#This loop iterates over each row of the table and appends the columns to wsj_rankings
 		for school in table_soup.findAll('tr'):
-			
+
 			#Check for empty rows
 			if(len(school.findAll('td')) < 7):
 				continue
@@ -96,7 +112,6 @@ def getWSJInfo():
 				driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
 				break
 
-			#print(school.findAll('td')[4].get_text())
 
 			# If the order of information changes this must be changed
 			school.find('td').extract()
@@ -107,6 +122,53 @@ def getWSJInfo():
 			wsj_rankings.engagement.append(school.find('td').extract().get_text())
 			wsj_rankings.environment.append(school.find('td').extract().get_text())
 			wsj_rankings.average_net_price.append(school.find('td').extract().get_text())
+
+			# Information for getting details
+			detail_list = []
+			school_xpath = xpath_soup(school)
+			school_driver = driver.find_elements_by_xpath(school_xpath)[0]
+			school_driver.click()
+			content = driver.page_source
+			soup = BeautifulSoup(content, features="html.parser")
+			detail_soup = soup.find('div', {'class': 'college-details__table'})
+			detail_tables = soup.findAll('tbody')
+			driver.execute_script("window.scrollTo(0, window.scrollY + 800)")
+
+			# Scores and Ranks
+			detail_tables[0].find('td').extract()
+			wsj_rankings.overall_score.append(detail_tables[0].find('td').extract().get_text())
+			detail_tables[0].find('td').extract()
+			wsj_rankings.outcomes_score.append(detail_tables[0].find('td').extract().get_text())
+			detail_tables[0].find('td').extract()
+			wsj_rankings.resources_score.append(detail_tables[0].find('td').extract().get_text())
+			detail_tables[0].find('td').extract()
+			wsj_rankings.engagement_score.append(detail_tables[0].find('td').extract().get_text())
+			detail_tables[0].find('td').extract()
+			wsj_rankings.environment_score.append(detail_tables[0].find('td').extract().get_text())
+			# Students
+			detail_tables[1].find('td').extract()
+			wsj_rankings.enrollment.append(detail_tables[1].find('td').extract().get_text())
+			detail_tables[1].find('td').extract()
+			wsj_rankings.studentfac_ratio.append(detail_tables[1].find('td').extract().get_text())
+			detail_tables[1].find('td').extract()
+			wsj_rankings.spending_per_student.append(detail_tables[1].find('td').extract().get_text())
+			# Costs
+			detail_tables[2].find('td').extract()
+			wsj_rankings.tuition.append(detail_tables[2].find('td').extract().get_text())
+			detail_tables[2].find('td').extract()
+			wsj_rankings.room_and_board.append(detail_tables[2].find('td').extract().get_text())
+			detail_tables[2].find('td').extract()
+			wsj_rankings.average_net_price.append(detail_tables[2].find('td').extract().get_text())
+			# Salary and Debt
+			detail_tables[3].find('td').extract()
+			wsj_rankings.salary_10_years_after.append(detail_tables[3].find('td').extract().get_text())
+			detail_tables[3].find('td').extract()
+			wsj_rankings.default_rate.append(detail_tables[3].find('td').extract().get_text())
+			detail_tables[3].find('td').extract()
+			wsj_rankings.debt_after_grad.append(detail_tables[3].find('td').extract().get_text())
+
+			#print(school.findAll('td')[4].get_text())
+
 
 		#This moves to the next page of the table and updates soup and table_soup
 		if(next_button_soup.attrs["class"][0] != "disabled"):
