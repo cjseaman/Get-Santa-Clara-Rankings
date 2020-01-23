@@ -50,6 +50,10 @@ class pageInfoClass:
 	def __init__(self):
 		pass
 
+def xstr(s):
+    if s is None:
+        return ''
+    return str(s)
 
 # This function initializes and opens a chrome window controlled by selenium
 # It takes no arguments and returns a pageInfo object, which contains:
@@ -116,6 +120,7 @@ def getWSJInfo():
 			# If the order of information changes this must be changed
 			school.find('td').extract()
 			wsj_rankings.rank.append(school.find('td').extract().get_text())
+			print(school.find('td').get_text())
 			wsj_rankings.college.append(school.find('td').extract().get_text())
 			wsj_rankings.outcomes.append(school.find('td').extract().get_text())
 			wsj_rankings.resources.append(school.find('td').extract().get_text())
@@ -130,42 +135,46 @@ def getWSJInfo():
 			school_driver.click()
 			content = driver.page_source
 			soup = BeautifulSoup(content, features="html.parser")
-			detail_soup = soup.find('div', {'class': 'college-details__table'})
-			detail_tables = soup.findAll('tbody')
+			detail_soup = soup.find('tr', {'class': 'expanding-row'})
+			detail_tables = detail_soup.findAll('tbody')
 			driver.execute_script("window.scrollTo(0, window.scrollY + 800)")
 
 			# Scores and Ranks
 			detail_tables[0].find('td').extract()
-			wsj_rankings.overall_score.append(detail_tables[0].find('td').extract().get_text())
+			wsj_rankings.overall_score.append(xstr(detail_tables[0].find('td').extract().get_text()))
 			detail_tables[0].find('td').extract()
-			wsj_rankings.outcomes_score.append(detail_tables[0].find('td').extract().get_text())
+			wsj_rankings.outcomes_score.append(xstr(detail_tables[0].find('td').extract().get_text()))
 			detail_tables[0].find('td').extract()
-			wsj_rankings.resources_score.append(detail_tables[0].find('td').extract().get_text())
+			wsj_rankings.resources_score.append(xstr(detail_tables[0].find('td').extract().get_text()))
 			detail_tables[0].find('td').extract()
-			wsj_rankings.engagement_score.append(detail_tables[0].find('td').extract().get_text())
+			wsj_rankings.engagement_score.append(xstr(detail_tables[0].find('td').extract().get_text()))
 			detail_tables[0].find('td').extract()
-			wsj_rankings.environment_score.append(detail_tables[0].find('td').extract().get_text())
+			wsj_rankings.environment_score.append(xstr(detail_tables[0].find('td').extract().get_text()))
 			# Students
 			detail_tables[1].find('td').extract()
-			wsj_rankings.enrollment.append(detail_tables[1].find('td').extract().get_text())
+			wsj_rankings.enrollment.append(xstr(detail_tables[1].find('td').extract().get_text()))
 			detail_tables[1].find('td').extract()
-			wsj_rankings.studentfac_ratio.append(detail_tables[1].find('td').extract().get_text())
+			wsj_rankings.studentfac_ratio.append(xstr(detail_tables[1].find('td').extract().get_text()))
 			detail_tables[1].find('td').extract()
-			wsj_rankings.spending_per_student.append(detail_tables[1].find('td').extract().get_text())
+			wsj_rankings.spending_per_student.append(xstr(detail_tables[1].find('td').extract().get_text()))
 			# Costs
 			detail_tables[2].find('td').extract()
-			wsj_rankings.tuition.append(detail_tables[2].find('td').extract().get_text())
+			wsj_rankings.tuition.append(xstr(detail_tables[2].find('td').extract().get_text()))
 			detail_tables[2].find('td').extract()
-			wsj_rankings.room_and_board.append(detail_tables[2].find('td').extract().get_text())
+			wsj_rankings.room_and_board.append(xstr(detail_tables[2].find('td').extract().get_text()))
 			detail_tables[2].find('td').extract()
-			wsj_rankings.average_net_price.append(detail_tables[2].find('td').extract().get_text())
+			#Average Net Price must be skipped v
+			detail_tables[2].find('td').extract()
 			# Salary and Debt
 			detail_tables[3].find('td').extract()
-			wsj_rankings.salary_10_years_after.append(detail_tables[3].find('td').extract().get_text())
+			wsj_rankings.salary_10_years_after.append(xstr(detail_tables[3].find('td').extract().get_text()))
 			detail_tables[3].find('td').extract()
-			wsj_rankings.default_rate.append(detail_tables[3].find('td').extract().get_text())
+			wsj_rankings.default_rate.append(xstr(detail_tables[3].find('td').extract().get_text()))
 			detail_tables[3].find('td').extract()
-			wsj_rankings.debt_after_grad.append(detail_tables[3].find('td').extract().get_text())
+			wsj_rankings.debt_after_grad.append(xstr(detail_tables[3].find('td').extract().get_text()))
+
+			driver.execute_script("window.scrollTo(0, window.scrollY - 800)")
+			school_driver.click()
 
 			#print(school.findAll('td')[4].get_text())
 
