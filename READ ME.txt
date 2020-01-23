@@ -1,0 +1,40 @@
+  ##########################################
+ ##                                        ##
+##   FIRST TIME INSTALLATION INSTRUCTIONS   ##
+ ##                                        ## 
+  ##########################################
+
+1. Install python 3.8 and the latest version of pip
+
+2. Double click and run install_packages.bat to install python packages
+	You can also open it in any text editor and run the commands listed.
+
+	If you get an error saying that pip or python is not recognized as a command, 
+	you will need to add python to PATH and make sure pip is installed
+
+# HOW TO RUN THE SCRIPT #
+
+1. Navigate to the script_files folder
+
+2. Shift-click inside the folder and select "Open Powershell Window Here"
+
+3. In the blue powershell window that pops up type:
+
+python generate_table.py
+
+4. A windows defender window may come up, just click "allow access" (This will allow python to access the internet)
+
+5. Wait for the script to run
+
+6. Check for the csv file inside the script_files\Output Tables\ folder. There should be one more row than there are entries in the wsj table.
+	
+	In the unlikely but possible event that there are more or fewer entries than there should be, the script will need to be updated.
+	If the script finishes witout going through the whole table, you may just need to run it again
+	If the script continually fails to go through the whole table, you may need to add an exception for python.exe in windows defender
+
+
+If anything else goes wrong, it is probably because wsj changed the layout of their site or one of the packages used in the script has changed.
+I documented my code so you should be able to get any competent COEN major to fix it for you.
+If you are the COEN major fixing my code, I'm so sorry.
+
+- Collin Seaman
